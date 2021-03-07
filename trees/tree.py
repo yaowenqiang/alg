@@ -36,11 +36,81 @@ class Node(object):
         return f"Node({self.get_value()})"
 
 class Tree(object):
-    def __init__(self,value):
-        self.root = Node(value)
+    def __init__(self,value = None):
+        if value != None:
+            self.root = Node(value)
     
     def get_root(self):
         return self.root
+
+    def compare(self, node, new_node):
+        if new_node.get_value() == node.get_value():
+            return 0
+        elif new_node.get_value() < node.get_value():
+            return -1
+        else:
+            return 1
+
+    def insert_with_loop(self, new_value):
+        new_node = Node(new_value)
+        node = self.get_root()
+        if node == None:
+            self.root = new_node
+            return
+        while(True):
+            comparison = self.compare(node, new_node)
+            if comparison == 0:
+                node.set_value(new_node.get_value())
+                break
+            elif comparison == -1:
+                if node.has_left_child():
+                    node = node.get_left_child()
+                else:
+                    node.set_left_child(new_node)
+                    break
+            else:
+                if node.has_right_child():
+                    node = node.get_right_child()
+                else:
+                    node.set_right_child(new_node)
+                    break
+    
+    def insert_recursively(self, noew, new_node):
+        comparison == self.compare(node, new_node)
+        if comparison == 0:
+            node.set_value(new_node.get_value())
+        elif comparison == -1:
+            if node.has_left_child():
+                self.insert_recursively(node.get_left_child(), new_node)
+            else:
+                node.set_left_child(new_node)
+        else:
+            if node.has_right_child():
+                self.insert_recursively(node.get_right_child(), new_node)
+            else:
+                node.set_right_child(new_node)
+
+
+    def search(self, value):
+        node = self.get_root()
+        s_node = Node(value)
+        while(True):
+            comparison = self.compare(node, s_node)
+            if comparison == 0:
+                return True
+            elif comparison == -1:
+                if node.has_left_child():
+                    node = node.get_left_child()
+                else:
+                    return False
+            else:
+                if node.has_right_child():
+                    node = node.get_right_child()
+                else:
+                    return False
+
+    def delete(self, value):
+        # pass
 
     def __repr__(self):
         level = 0
@@ -219,3 +289,22 @@ def bfs(tree):
 
 print(bfs(tree))
 print(tree)
+
+btree = Tree(1)
+btree.insert_with_loop(5)
+btree.insert_with_loop(6)
+btree.insert_with_loop(4)
+btree.insert_with_loop(2)
+btree.insert_with_loop(5)
+# print(btree)
+
+print(btree.search(8))
+print(btree.search(2))
+
+brtree = Tree(1)
+brtree.insert_with_loop(5)
+brtree.insert_with_loop(6)
+brtree.insert_with_loop(4)
+brtree.insert_with_loop(2)
+brtree.insert_with_loop(5)
+print(brtree)
