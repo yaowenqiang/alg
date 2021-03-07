@@ -110,6 +110,59 @@ class Tree(object):
                     return False
 
     def delete(self, value):
+        node = self.get_root()
+        s_node = Node(value)
+        if node == None:
+            return node
+        while(True):
+            comparison = self.compare(node, s_node)
+            if comparison == 0:
+                matched = True
+                break
+            elif comparison == -1:
+                if node.has_left_child():
+                    parentNode = node
+                    node = node.get_left_child()
+                else:
+                    matched = False
+                    break
+            else:
+                if node.has_right_child():
+                    parentNode = node
+                    node = node.get_right_child()
+                else:
+                    matched = False
+                    break
+        
+        if matched == True:
+            if node.has_left_child() == True:
+                # has two child
+                if node.has_right_child() == True:
+                    currentNode = node
+                    while (currentNode.has_left_child()):
+                        parentCurrentNode = currentNode
+                        currentNode = currentNode.get_left_child()
+
+                    node.set_value(currentNode.get_value()) 
+                    parentCurrentNode.set_left_child(parentCurrentNode.get_right_child())
+                    currentNode.set_value(None)
+                # only has one child
+                else:
+                    parentNode.set_left_child(node.get_left_child())
+                    node.set_value(None)
+            else:
+                # has no child
+                if node.has_right_child():
+                    rightChild = node.get_right_child()
+                    node.set_value(rightChild.get_value())
+                    if rightChild.has_left_child():
+                        node.set_left_child(rightChild.get_left_child())
+                    if rightChild.has_right_child():
+                        node.set_right_child(rightChild.get_right_child())
+                else:
+                    node.set_value(None)
+
+
         # pass
 
     def __repr__(self):
@@ -307,4 +360,8 @@ brtree.insert_with_loop(6)
 brtree.insert_with_loop(4)
 brtree.insert_with_loop(2)
 brtree.insert_with_loop(5)
+print(brtree)
+brtree.delete(5)
+brtree.delete(1)
+brtree.delete(4)
 print(brtree)
